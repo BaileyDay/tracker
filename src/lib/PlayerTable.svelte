@@ -14,7 +14,7 @@
 	export let players: Array<{
 		playerId: number;
 		name: string;
-		nekoscore: number;
+		nekoscore: number | null;
 		avatarUrl: string;
 		rank: string;
 	}>;
@@ -25,6 +25,8 @@
 	$: sortedPlayers = [...players].sort((a, b) => {
 		const aValue = a[sortColumn];
 		const bValue = b[sortColumn];
+		if (aValue === null || aValue === undefined) return 1;
+		if (bValue === null || bValue === undefined) return -1;
 		if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
 		if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
 		return 0;
@@ -99,20 +101,26 @@
 					<TableCell class="flex items-center space-x-2">
 						<Avatar>
 							<AvatarImage src={player.avatarUrl} alt={player.name} />
-							<AvatarFallback class="bg-[#363636] text-[#EFDEBF]"
-								>{player.name.charAt(0)}</AvatarFallback
-							>
+							<AvatarFallback class="bg-[#363636] text-[#EFDEBF]">
+								{player.name ? player.name.charAt(0) : '?'}
+							</AvatarFallback>
 						</Avatar>
-						<span class="text-[#EFDEBF] truncate">{player.name}</span>
+						<span class="text-[#EFDEBF] truncate">{player.name || 'Unknown Player'}</span>
 					</TableCell>
-					<TableCell class="text-[#FF9900] font-semibold">{player.nekoscore}</TableCell>
+					<TableCell class="text-[#FF9900] font-semibold">
+						{player.nekoscore !== null && player.nekoscore !== undefined ? player.nekoscore : 'N/A'}
+					</TableCell>
 					<TableCell>
-						<span
-							class="px-2 py-1 rounded text-xs font-semibold"
-							style="background-color: {getRankColor(player.rank)};"
-						>
-							{player.rank}
-						</span>
+						{#if player.rank}
+							<span
+								class="px-2 py-1 rounded text-xs font-semibold"
+								style="background-color: {getRankColor(player.rank)};"
+							>
+								{player.rank}
+							</span>
+						{:else}
+							<span class="px-2 py-1 rounded text-xs font-semibold bg-[#363636]">Unranked</span>
+						{/if}
 					</TableCell>
 				</TableRow>
 			{/each}

@@ -34,6 +34,7 @@
 	"type": "module",
 	"dependencies": {
 		"@internationalized/date": "^3.5.6",
+		"@sparticuz/chromium": "^106.0.2",
 		"axios": "^1.7.7",
 		"bits-ui": "^0.21.16",
 		"cheerio": "^1.0.0",
