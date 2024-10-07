@@ -1,10 +1,35 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import PlayerTable from '../lib/PlayerTable.svelte';
+	import { fade, fly } from 'svelte/transition';
 	import { Card } from '$lib/components/ui/card';
 	import Faq from '../lib/Faq.svelte';
-	export let data;
 
-	$: ({ players } = data);
+	let players = [];
+	let loading = true;
+	let loadingMessages = [
+		"Please wait, don't refresh...",
+		'Fetching player data...',
+		'Almost there...',
+		'Just a moment longer...'
+	];
+	let currentMessageIndex = 0;
+
+	onMount(async () => {
+		const messageInterval = setInterval(() => {
+			currentMessageIndex = (currentMessageIndex + 1) % loadingMessages.length;
+		}, 3000);
+
+		try {
+			const response = await fetch('/api/players');
+			players = await response.json();
+		} catch (error) {
+			console.error('Failed to fetch players:', error);
+		} finally {
+			loading = false;
+			clearInterval(messageInterval);
+		}
+	});
 </script>
 
 <head>
@@ -19,8 +44,21 @@
 		<Card class="bg-[#181A20] border-[#363636] shadow-lg">
 			<div class="p-6">
 				<h2 class="text-2xl font-bold mb-4 text-orange-400">Top Players</h2>
-				{#if players.length === 0}
-					<p class="text-center text-gray-500">No player data available.</p>
+				{#if loading}
+					<div class="flex flex-col justify-center items-center h-64" transition:fade>
+						<div
+							class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-orange-500 mb-4"
+						></div>
+						{#key currentMessageIndex}
+							<p
+								class="text-orange-300 text-lg"
+								in:fly={{ y: 20, duration: 300 }}
+								out:fade={{ duration: 300 }}
+							>
+								{loadingMessages[currentMessageIndex]}
+							</p>
+						{/key}
+					</div>
 				{:else}
 					<PlayerTable {players} />
 				{/if}
