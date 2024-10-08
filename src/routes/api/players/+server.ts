@@ -71,11 +71,16 @@ async function getPlayerData(playerId: number) {
 }
 
 export const GET: RequestHandler = async () => {
-	const promises = playerIds.map(getPlayerData);
-	const playersData = await Promise.all(promises);
+	const playersData = [];
 
-	const validPlayers = playersData.filter(Boolean);
-	validPlayers.sort((a, b) => (b.nekoscore || 0) - (a.nekoscore || 0));
+	for (const playerId of playerIds) {
+		const data = await getPlayerData(playerId); // Run one request at a time
+		if (data) {
+			playersData.push(data);
+		}
+	}
 
-	return json(validPlayers);
+	playersData.sort((a, b) => (b.nekoscore || 0) - (a.nekoscore || 0));
+
+	return json(playersData);
 };
