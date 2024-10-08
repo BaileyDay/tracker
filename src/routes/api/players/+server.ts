@@ -16,7 +16,7 @@ async function getPlayerData(playerId: number) {
 
 	async function getBrowser() {
 		if (process.env.VERCEL_ENV === 'production') {
-			const executablePath = await chromium.executablePath(CHROME_URL);
+			const executablePath = await chromium?.executablePath(CHROME_URL);
 
 			const browser = await puppeteerCore.launch({
 				args: chromium.args,
@@ -61,6 +61,7 @@ async function getPlayerData(playerId: number) {
 		return { playerId, ...data };
 	} catch (error) {
 		console.error(`Error fetching data for player ${playerId}:`, error);
+		await browser?.close();
 		return null;
 	} finally {
 		if (browser) {
