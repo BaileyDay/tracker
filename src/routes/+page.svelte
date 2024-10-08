@@ -12,7 +12,8 @@
 		"Please wait, don't refresh...",
 		'Fetching player data...',
 		'Almost there...',
-		'Just a moment longer...'
+		'Just a moment longer...',
+		'man fck winterblade'
 	];
 	let currentMessageIndex = 0;
 
@@ -24,6 +25,7 @@
 		try {
 			const response = await fetch('/api/players');
 			players = await response.json();
+			console.log('players', players);
 		} catch (error) {
 			console.error('Failed to fetch players:', error);
 		} finally {

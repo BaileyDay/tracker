@@ -92,7 +92,7 @@
 			</TableRow>
 		</TableHeader>
 		<TableBody>
-			{#each sortedPlayers as player, index (player.playerId)}
+			{#each sortedPlayers as player, index (player.steamId64)}
 				<TableRow
 					class="border-b border-[#363636] hover:bg-[#1E2028] cursor-pointer transition-colors duration-150"
 					on:click={() => navigateToProfile(player.playerId)}
