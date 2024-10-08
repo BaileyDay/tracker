@@ -1,8 +1,8 @@
-// src/routes/api/players/+server.ts
-
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import puppeteerCore from 'puppeteer-core';
 import puppeteer from 'puppeteer';
+import chromium from '@sparticuz/chromium';
 
 const playerIds = [
 	60587108, 57439638, 142971229, 148511671, 57439584, 1154584751, 110594995, 54565124, 143912978,
@@ -11,11 +11,26 @@ const playerIds = [
 
 async function getPlayerData(playerId: number) {
 	let browser;
+
+	async function getBrowser() {
+		if (process.env.VERCEL_ENV === 'production') {
+			const executablePath = await chromium.executablePath;
+
+			const browser = await puppeteerCore.launch({
+				args: chromium.args,
+				defaultViewport: chromium.defaultViewport,
+				executablePath,
+				headless: chromium.headless
+			});
+			return browser;
+		} else {
+			const browser = await puppeteer.launch();
+			return browser;
+		}
+	}
+
 	try {
-		browser = await puppeteer.launch({
-			headless: true,
-			args: ['--no-sandbox', '--disable-setuid-sandbox']
-		});
+		browser = await getBrowser();
 		const page = await browser.newPage();
 
 		await page.goto(`https://tracklock.gg/players/${playerId}`, {
