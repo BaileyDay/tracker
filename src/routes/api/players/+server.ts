@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer';
 import chromium from '@sparticuz/chromium';
 
 export const config = {
-	maxDuration: 120
+	maxDuration: 300
 };
 
 const playerIds = [
