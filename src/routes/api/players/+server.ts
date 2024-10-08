@@ -14,7 +14,7 @@ async function getPlayerData(playerId: number) {
 
 	async function getBrowser() {
 		if (process.env.VERCEL_ENV === 'production') {
-			const executablePath = await chromium.executablePath;
+			const executablePath = await chromium.executablePath();
 
 			const browser = await puppeteerCore.launch({
 				args: chromium.args,
