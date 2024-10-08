@@ -1,6 +1,6 @@
 {
 	"functions": {
-		"src/routes/api/**/*.ts": {
+		"src/routes/api/players/+server.ts": {
 			"maxDuration": 60
 		}
 	}
