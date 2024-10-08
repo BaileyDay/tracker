@@ -9,12 +9,14 @@ const playerIds = [
 	81243397 /* Add more player IDs here */
 ];
 
+const CHROME_URL = process.env.CHROMIUM;
+
 async function getPlayerData(playerId: number) {
 	let browser;
 
 	async function getBrowser() {
 		if (process.env.VERCEL_ENV === 'production') {
-			const executablePath = await chromium.executablePath();
+			const executablePath = await chromium.executablePath(CHROME_URL);
 
 			const browser = await puppeteerCore.launch({
 				args: chromium.args,
