@@ -35,12 +35,17 @@ async function getBrowser() {
 async function getPlayerData(playerId: number, browser: puppeteer.Browser) {
 	try {
 		const page = await browser.newPage();
+		await page.setUserAgent(
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+		);
 		await page.goto(`https://tracklock.gg/players/${playerId}`, {
-			waitUntil: 'networkidle0', // Wait for network to be idle
+			waitUntil: 'networkidle2', // Wait for network to be idle
 			timeout: 60000 // Increase overall page load timeout to 60 seconds
 		});
 
-		await page.waitForSelector('.font-semibold.text-lg', { timeout: 15000 });
+		await page.waitForFunction(() => document.querySelector('.font-semibold.text-lg') !== null, {
+			timeout: 30000
+		});
 
 		const data = await page.evaluate(() => {
 			const nekoscoreElement = document.querySelector('span.font-semibold.text-lg.text-orange-400');
