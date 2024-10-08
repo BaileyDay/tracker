@@ -13,7 +13,7 @@ const CHROME_URL = process.env.CHROMIUM;
 
 async function getBrowser() {
 	if (process.env.VERCEL_ENV === 'production') {
-		const executablePath = await chromium?.executablePath(CHROME_URL);
+		const executablePath = await chromium?.executablePath();
 
 		const browser = await puppeteerCore.launch({
 			args: chromium.args,
