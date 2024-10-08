@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import PlayerTable from '../lib/PlayerTable.svelte';
+	import BarGraph from '../lib/BarGraph.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { Card } from '$lib/components/ui/card';
 	import Faq from '../lib/Faq.svelte';
@@ -61,6 +62,10 @@
 					</div>
 				{:else}
 					<PlayerTable {players} />
+					<div class="mt-8">
+						<h3 class="text-xl font-bold mb-4 text-orange-400">NekoScore Visualization</h3>
+						<BarGraph {players} />
+					</div>
 				{/if}
 			</div>
 		</Card>
