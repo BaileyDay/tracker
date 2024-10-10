@@ -41,8 +41,8 @@
 		}
 	}
 
-	function navigateToProfile(playerId: number) {
-		window.open(`https://tracklock.gg/players/${playerId}`, '_blank');
+	function navigateToProfile(steamId32: number) {
+		window.open(`https://tracklock.gg/players/${steamId32}`, '_blank');
 	}
 
 	function getRankColor(rank: string): string {
@@ -92,10 +92,10 @@
 			</TableRow>
 		</TableHeader>
 		<TableBody>
-			{#each sortedPlayers as player, index (player.steamId64)}
+			{#each sortedPlayers as player, index (player.steamId32)}
 				<TableRow
 					class="border-b border-[#363636] hover:bg-[#1E2028] cursor-pointer transition-colors duration-150"
-					on:click={() => navigateToProfile(player.playerId)}
+					on:click={() => navigateToProfile(player.steamId32)}
 				>
 					<TableCell class="font-medium text-[#EFDEBF]">{index + 1}</TableCell>
 					<TableCell class="flex items-center space-x-2">
