@@ -9,18 +9,18 @@
 		rank: string;
 	}>;
 
+	// Define rank thresholds
 	const rankThresholds = [
-		{ name: 'Bronze', color: '#CD7F32', min: 0, max: 197.5 },
-		{ name: 'Silver', color: '#C0C0C0', min: 197.5, max: 252.19 },
-		{ name: 'Gold', color: '#FFD700', min: 252.19, max: 307.5 },
-		{ name: 'Platinum', color: '#E5E4E2', min: 307.5, max: 392.5 },
-		{ name: 'Mystic', color: '#9370DB', min: 392.5, max: 611.88 },
-		{ name: 'Astral', color: '#87CEEB', min: 611.88, max: 915 },
-		{ name: 'Professor', color: '#4B0082', min: 915, max: 1223.91 },
-		{ name: 'Supernatural', color: '#FF1493', min: 1223.91, max: 1631.04 },
-		{ name: 'Deadlocked', color: '#FF4500', min: 1631.04, max: Infinity }
+		{ name: 'Bronze', color: '#CD7F32', min: 343.0, max: 1241.0 },
+		{ name: 'Silver', color: '#C0C0C0', min: 1241.0, max: 1506.0 },
+		{ name: 'Gold', color: '#FFD700', min: 1506.0, max: 1671.0 },
+		{ name: 'Platinum', color: '#E5E4E2', min: 1671.0, max: 1850.0 },
+		{ name: 'Mystic', color: '#9370DB', min: 1850.0, max: 2107.0 },
+		{ name: 'Astral', color: '#87CEEB', min: 2107.0, max: 2303.0 },
+		{ name: 'Professor', color: '#4B0082', min: 2303.0, max: 2413.0 },
+		{ name: 'Supernatural', color: '#FF1493', min: 2413.0, max: 2492.0 },
+		{ name: 'Deadlocked', color: '#FF4500', min: 2492.0, max: Infinity } // Set max to Infinity to include all higher scores
 	];
-
 	let svgElement: SVGSVGElement;
 
 	onMount(() => {

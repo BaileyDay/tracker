@@ -44,11 +44,16 @@
 		{ text: 'A piece of the divine in your hot little hands.' }
 	];
 
-	let currentQuoteIndex = 0;
+	let currentQuoteIndex = -1;
+	let previousQuoteIndex = -1;
 
 	onMount(async () => {
 		const quoteInterval = setInterval(() => {
-			currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+			// Pick a random index different from the previous one
+			do {
+				currentQuoteIndex = Math.floor(Math.random() * quotes.length);
+			} while (currentQuoteIndex === previousQuoteIndex);
+			previousQuoteIndex = currentQuoteIndex;
 		}, 4000); // Change quote every 4 seconds
 
 		const messageInterval = setInterval(() => {
@@ -64,7 +69,8 @@
 		} finally {
 			loading = false;
 			clearInterval(messageInterval);
-			clearInterval(quoteInterval);
+			// Uncomment the next line if you want the quotes to stop changing after loading
+			// clearInterval(quoteInterval);
 		}
 	});
 </script>
@@ -79,7 +85,7 @@
 
 		<!-- Animated Quotes -->
 		<div class="text-center text-orange-100 h-6 overflow-hidden">
-			{#if quotes.length > 0}
+			{#if quotes.length > 0 && currentQuoteIndex !== -1}
 				{#key currentQuoteIndex}
 					<p class="text-lg" in:fly={{ y: 20, duration: 500 }} out:fly={{ y: -20, duration: 500 }}>
 						"{quotes[currentQuoteIndex].text}"
