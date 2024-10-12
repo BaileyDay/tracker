@@ -9,10 +9,10 @@
 	} from '$lib/components/ui/table';
 	import { Button } from '$lib/components/ui/button';
 	import { Avatar, AvatarImage, AvatarFallback } from '$lib/components/ui/avatar';
-	import { ArrowUpDown } from 'lucide-svelte';
+	import { ArrowUpDown, Crown } from 'lucide-svelte';
 
 	export let players: Array<{
-		playerId: number;
+		steamId32: number;
 		name: string;
 		nekoscore: number | null;
 		avatarUrl: string;
@@ -41,12 +41,13 @@
 		}
 	}
 
-	function navigateToProfile(steamId32: number) {
-		window.open(`https://tracklock.gg/players/${steamId32}`, '_blank');
+	function navigateToProfile(playerId: number) {
+		window.open(`https://tracklock.gg/players/${playerId}`, '_blank');
 	}
 
-	function getRankColor(rank: string): string {
-		switch (rank.toLowerCase()) {
+	function getRankColor(rank: string | null | undefined): string {
+		if (!rank) return '#363636';
+		switch (rank.toLowerCase().trim()) {
 			case 'bronze':
 				return '#CD7F32';
 			case 'silver':
@@ -61,9 +62,11 @@
 				return '#363636';
 		}
 	}
+
+	const crownColors = ['#FFD700', '#C0C0C0', '#CD7F32']; // Gold, Silver, Bronze
 </script>
 
-<div class="overflow-x-hidden">
+<div class="overflow-x-auto">
 	<Table>
 		<TableHeader>
 			<TableRow class="border-b border-[#363636]">
@@ -97,21 +100,33 @@
 					class="border-b border-[#363636] hover:bg-[#1E2028] cursor-pointer transition-colors duration-150"
 					on:click={() => navigateToProfile(player.steamId32)}
 				>
-					<TableCell class="font-medium text-[#EFDEBF]">{index + 1}</TableCell>
+					<TableCell class="font-medium text-[#EFDEBF]">
+						{index + 1}
+					</TableCell>
 					<TableCell class="flex items-center space-x-2">
-						<Avatar>
-							<AvatarImage src={player.avatarUrl} alt={player.name} />
-							<AvatarFallback class="bg-[#363636] text-[#EFDEBF]">
-								{player.name ? player.name.charAt(0) : '?'}
-							</AvatarFallback>
-						</Avatar>
+						<div class="relative">
+							<Avatar>
+								<AvatarImage src={player.avatarUrl} alt={player.name} />
+								<AvatarFallback class="bg-[#363636] text-[#EFDEBF]">
+									{player.name ? player.name.charAt(0) : '?'}
+								</AvatarFallback>
+							</Avatar>
+							{#if index < 3}
+								<Crown
+									class="absolute -top-1 -right-1 w-5 h-5 rotate-45 crown-icon"
+									fill={crownColors[index]}
+									color={crownColors[index]}
+									stroke={crownColors[index]}
+								/>
+							{/if}
+						</div>
 						<span class="text-[#EFDEBF] truncate">{player.name || 'Unknown Player'}</span>
 					</TableCell>
-					<TableCell class="text-[#FF9900] font-semibold">
+					<TableCell class="font-semibold" style="color: {getRankColor(player.rank)}">
 						{player.nekoscore !== null && player.nekoscore !== undefined ? player.nekoscore : 'N/A'}
 					</TableCell>
 					<TableCell>
-						{#if player.rank}
+						{#if player.rank && player.rank.trim() !== ''}
 							<span
 								class="px-2 py-1 rounded text-xs font-semibold"
 								style="background-color: {getRankColor(player.rank)};"
@@ -130,8 +145,7 @@
 
 <style>
 	:global(table) {
-		width: 100%;
-		table-layout: fixed;
+		min-width: 100%;
 	}
 
 	:global(td),
@@ -139,5 +153,12 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+
+	/* Optional: Adjust the positioning if needed */
+	:global(.crown-icon) {
+		position: absolute;
+		top: -5px;
+		right: -10px;
 	}
 </style>
